@@ -1,0 +1,90 @@
+-- Table: Customers
+CREATE TABLE Customers (
+    CustomerID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(100) NOT NULL,
+    LastName VARCHAR(100) NOT NULL,
+    Email VARCHAR(255) NOT NULL UNIQUE,
+    PhoneNumber VARCHAR(50) UNIQUE,
+    JoinDate DATE NOT NULL,
+    LoyaltyPoints INT DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Table: Stores
+CREATE TABLE Stores (
+    StoreID INT AUTO_INCREMENT PRIMARY KEY,
+    StoreName VARCHAR(150) NOT NULL,
+    Address VARCHAR(255),
+    City VARCHAR(100),
+    State VARCHAR(50),
+    ZipCode VARCHAR(20)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Table: Employees
+CREATE TABLE Employees (
+    EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(100) NOT NULL,
+    LastName VARCHAR(100) NOT NULL,
+    Position VARCHAR(100),
+    HireDate DATE,
+    HourlyRate DECIMAL(10, 2),
+    StoreID INT,
+    FOREIGN KEY (StoreID) REFERENCES Stores(StoreID)
+        ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Table: Products
+CREATE TABLE Products (
+    ProductID INT AUTO_INCREMENT PRIMARY KEY,
+    ProductName VARCHAR(150) NOT NULL,
+    Category VARCHAR(100),
+    Price DECIMAL(10, 2) NOT NULL CHECK (Price >= 0),
+    StockQuantity INT DEFAULT 0 CHECK (StockQuantity >= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Table: Orders
+CREATE TABLE Orders (
+    OrderID INT AUTO_INCREMENT PRIMARY KEY,
+    CustomerID INT NULL,
+    EmployeeID INT NOT NULL,
+    StoreID INT NOT NULL,
+    OrderTimestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    TotalAmount DECIMAL(10, 2) DEFAULT 0.00,
+    PointsEarned INT DEFAULT 0,
+    PointsRedeemed INT DEFAULT 0,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID) ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (StoreID) REFERENCES Stores(StoreID) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Table: OrderItems (Junction Table)
+CREATE TABLE OrderItems (
+    OrderItemID INT AUTO_INCREMENT PRIMARY KEY,
+    OrderID INT NOT NULL,
+    ProductID INT NOT NULL,
+    Quantity INT NOT NULL CHECK (Quantity > 0),
+    PriceAtTimeOfOrder DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Table: Promotions
+CREATE TABLE Promotions (
+    PromotionID INT AUTO_INCREMENT PRIMARY KEY,
+    PromotionName VARCHAR(150) NOT NULL,
+    Description TEXT,
+    DiscountType ENUM('PERCENT', 'FIXED') NOT NULL,
+    DiscountValue DECIMAL(10, 2) NOT NULL,
+    StartDate DATE,
+    EndDate DATE,
+    RequiredPoints INT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Table: AppliedPromotions (Junction Table)
+CREATE TABLE AppliedPromotions (
+    AppliedPromotionID INT AUTO_INCREMENT PRIMARY KEY,
+    OrderID INT NOT NULL,
+    PromotionID INT NOT NULL,
+    DiscountAmountApplied DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (PromotionID) REFERENCES Promotions(PromotionID) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
