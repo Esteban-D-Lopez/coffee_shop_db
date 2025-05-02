@@ -3,6 +3,7 @@
 **Author:** Esteban Lopez  
 **Course:** CS-GY 6083 Databases (Spring 2025) - NYU Tandon School of Engineering  
 **App Access:** https://github.com/Esteban-D-Lopez/coffee_shop_db
+**Presentation Video:** https://stream.nyu.edu/media/t/1_iv4ex9k9  
 
 ## Overview
 
