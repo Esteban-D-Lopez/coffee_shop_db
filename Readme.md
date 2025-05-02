@@ -471,8 +471,8 @@ coffee_shop_db/
     |-- app.py # Main Streamlit app file (Home page) 
     |-- database.py # Database connection & helper functions 
     |-- requirements.txt # Python package dependencies
-|-- DB-FinalProject-CoffeeShop.pptx # Presentation
 |-- ERD/ # EER diagram
+|-- Presentation/ # Final Presentation 
 |-- README.md # This file
 |-- SQL/ # SQL scripts to create, populate, and test db
 ```
