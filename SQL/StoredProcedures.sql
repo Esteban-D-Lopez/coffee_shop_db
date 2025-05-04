@@ -160,5 +160,3 @@ END$$
 
 -- Change the delimiter back to the standard semicolon
 DELIMITER ;
-
--- End of Script
