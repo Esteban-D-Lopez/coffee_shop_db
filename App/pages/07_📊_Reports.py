@@ -8,7 +8,7 @@ import pandas as pd
 from database import run_query
 
 st.set_page_config(page_title="Reports", layout="wide")
-st.title("📊 Reports Dashboard") # Added emoji
+st.title("📊 Reports Dashboard") 
 st.write("View aggregated data and performance metrics.")
 
 st.divider()
@@ -69,7 +69,6 @@ st.divider()
 # --- Report 3: Top Customers ---
 st.subheader("Top Customers (by Total Spent)")
 try:
-    # Query already sorts by TotalSpent DESC
     query_top_cust = """
     SELECT FirstName, LastName, Email, TotalOrders, TotalSpent
     FROM vw_CustomerOrderSummary
@@ -81,7 +80,7 @@ try:
         st.dataframe(df_top_cust, hide_index=True, use_container_width=True, column_config={
              "TotalSpent": st.column_config.NumberColumn(format="$%.2f")
          })
-        # Optional: Chart top customers spent
+        df_top_cust = df_top_cust.sort_values(by='TotalSpent', ascending=False)
         st.bar_chart(df_top_cust.set_index('Email')['TotalSpent']) # Using Email as unique index
     else:
         st.info("No top customer data found.")

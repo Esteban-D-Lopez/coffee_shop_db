@@ -15,8 +15,6 @@ st.write("View, Add, Edit, or Delete Customer records and view loyalty points.")
 
 # --- Display Existing Customers ---
 st.subheader("Existing Customers")
-# Using the view to show summary data might be nice here too
-# df_customers = run_query("SELECT * FROM vw_CustomerOrderSummary ORDER BY LastName, FirstName;")
 df_customers = run_query("SELECT CustomerID, FirstName, LastName, Email, PhoneNumber, JoinDate, LoyaltyPoints FROM Customers ORDER BY LastName, FirstName;")
 
 if not df_customers.empty:
@@ -39,7 +37,7 @@ with st.form("add_customer_form", clear_on_submit=True):
     if submitted_add:
         if not add_fname or not add_lname or not add_email:
             st.warning("First Name, Last Name, and Email are required.")
-        # Basic email format check (not perfect)
+        # Basic email format check 
         elif "@" not in add_email or "." not in add_email.split("@")[-1]:
              st.warning("Please enter a valid email address.")
         else:

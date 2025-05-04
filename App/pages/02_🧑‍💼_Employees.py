@@ -139,7 +139,6 @@ if not employee_list.empty:
         emp_name_del = selected_emp_display_del.split(" (ID:")[0]
 
         if st.button(f"Confirm Delete Employee: {emp_name_del}"):
-            # Check for related orders (FK is RESTRICT)
             orders_exist = run_query("SELECT COUNT(*) as count FROM Orders WHERE EmployeeID = %s;", params=(selected_emp_id_del,))
             if orders_exist.iloc[0]['count'] > 0:
                 st.error(f"Cannot delete employee. {orders_exist.iloc[0]['count']} order(s) reference this employee. (Deletion restricted by database constraint). Please reassign or delete orders first.")

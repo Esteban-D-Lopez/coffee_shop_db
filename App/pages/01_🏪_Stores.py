@@ -109,7 +109,6 @@ if not store_list.empty:
 
         if st.button(f"Confirm Delete Store: {store_name_del}"):
             try:
-                # Check related records (optional but good practice, FKs might handle this)
                 # Example: Check if employees are assigned to this store
                 employees_assigned = run_query("SELECT COUNT(*) as count FROM Employees WHERE StoreID = %s;", params=(selected_store_id_del,))
                 if employees_assigned.iloc[0]['count'] > 0:

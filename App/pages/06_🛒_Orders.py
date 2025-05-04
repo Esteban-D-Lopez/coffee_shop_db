@@ -19,7 +19,6 @@ tab1, tab2 = st.tabs(["View Past Orders", "Create New Order"])
 with tab1:
     st.header("View Past Orders")
     st.write("Displaying recent orders.")
-    # (Keep the existing code for Tab 1 as it was)
     query_orders = """
         SELECT
             o.OrderID, o.OrderTimestamp,
@@ -112,7 +111,7 @@ with tab2:
                       st.session_state.order_items[prod_id_to_add] = current_qty_in_cart + add_qty
                       st.success(f"Added {add_qty} x {prod_info['ProductName']}.")
                  else: st.warning(f"Cannot add {add_qty}. Only {current_stock} in stock (and {current_qty_in_cart} already in cart). Max add: {current_stock - current_qty_in_cart}")
-            else: st.error("Product data not found (should not happen).") # Added error check
+            else: st.error("Product data not found (should not happen).") # error check
         else: st.warning("Please select a product to add.")
     st.markdown("---")
 
@@ -192,7 +191,6 @@ with tab2:
                 st.warning("Employee and Store must be selected.")
             elif not st.session_state.order_items:
                 st.warning("Order must contain at least one item.")
-            # Optional: Add validation for points redemption vs customer's actual points here if desired
             else:
                 items_string = ",".join([f"{pid}:{qty}" for pid, qty in st.session_state.order_items.items()])
 

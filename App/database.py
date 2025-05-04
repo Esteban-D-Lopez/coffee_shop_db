@@ -28,9 +28,7 @@ def get_connection():
         return conn
     except pymysql.MySQLError as e:
         st.error(f"Error connecting to MySQL database: {e}")
-        # Stop the app if DB connection fails
-        # Returning None and checking might be better in some cases
-        st.stop()
+        st.stop() # Stop the app if DB connection fails
     except Exception as ex:
         st.error(f"An unexpected error occurred during connection: {ex}")
         st.stop()
@@ -82,7 +80,6 @@ def run_command(sql, params=None, fetch_output=False):
             # Fetch output parameters if requested (specific to CALL statements)
             if fetch_output and sql.strip().upper().startswith("CALL"):
                  # Assumes output params are selected by the procedure after the call
-                 # This might need adjustment based on how procedures return output
                  cursor.execute("SELECT @_proc_output AS output_param;") # Example convention
                  output_result = cursor.fetchone()
                  if output_result:
@@ -92,8 +89,7 @@ def run_command(sql, params=None, fetch_output=False):
             success = True
             st.toast("Command executed successfully!", icon="✔️")
             # Clear relevant caches if modifications were made
-            # st.cache_data.clear() # Simple approach
-            # Consider more granular cache invalidation if performance is critical
+            # st.cache_data.clear() 
     except pymysql.MySQLError as e:
         conn.rollback() # Rollback changes on error
         st.error(f"Database Command Error: {e}")
@@ -107,7 +103,7 @@ def run_command(sql, params=None, fetch_output=False):
     return success, output
 
 
-# --- Stored Procedure Call Functions (Examples) ---
+# --- Stored Procedure Call Functions  ---
 def call_sp_add_customer(first_name, last_name, email, phone):
     """Calls the sp_AddCustomer stored procedure."""
     sql = "CALL sp_AddCustomer(%s, %s, %s, %s, @new_id);"
